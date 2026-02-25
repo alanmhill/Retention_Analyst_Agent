@@ -32,18 +32,21 @@ services:
     container_name: ollama_init
     depends_on:
       - ollama
+    environment:
+      OLLAMA_HOST: http://ollama:11434
     volumes:
       - ollama:/root/.ollama
     entrypoint: ["/bin/sh", "-lc"]
-    command: >
-      "echo 'Waiting for Ollama...';
-       until (echo > /dev/tcp/ollama/11434) >/dev/null 2>&1; do
-         sleep 2;
-       done;
-       echo 'Ollama is up. Pulling models...';
-       ollama pull deepseek-r1:8b;
-       ollama pull nomic-embed-text;
-       echo 'Model pulls complete.'"
+    command: |
+      echo "Waiting for Ollama API..."
+      until ollama list >/dev/null 2>&1; do
+        sleep 2
+      done
+
+      echo "Ollama is up. Pulling models..."
+      ollama pull deepseek-r1:8b
+      ollama pull nomic-embed-text
+      echo "Model pulls complete."
     restart: "no"
 
   app:
