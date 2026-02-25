@@ -1,4 +1,4 @@
-#!/bin/sh
+﻿#!/bin/sh
 set -eux
 
 echo "Waiting for Ollama API at ${OLLAMA_HOST:-http://ollama:11434}..."
